@@ -10,6 +10,7 @@
 import Header from './components/layout/Header';
 import AddTodo from './components/AddTodo';
 import Todos from './components/Todos';
+import axios from 'axios';
 export default {
   name: 'App',
   components: {
@@ -20,7 +21,7 @@ export default {
   data() {
     return {
       todos: [
-        {
+       /* {
           id: 1,
           title: "Todo One",
           completed: false
@@ -34,17 +35,37 @@ export default {
           id: 1,
           title: "Todo Three",
           completed: false
-        }
+        }*/
       ]
     }
     },
     methods: {
+      /* eslint-disable */ 
       deleteTodo(id){
-        this.todos = this.todos.filter(todo => todo.id !== id);
-      },
-      addTodo(newTodo){
-        this.todos = [...this.todos, newTodo];
+        axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+        .then(res => this.todos = this.todos.filter(todo => todo.id !== id))
+        .catch(err => console.log(err));
+        //this.todos = this.todos.filter(todo => todo.id !== id);
       }
+      /* eslint-enable */
+      ,
+      addTodo(newTodo){
+        //post todo to api
+        const {title, completed} = newTodo;
+        axios.post('https://jsonplaceholder.typicode.com/todos', {
+          title,
+          completed
+        })
+        .then(res => this.todos = [...this.todos, res.data])
+        .catch(err => console.log(err));
+        //this.todos = [...this.todos, newTodo];
+      }
+    },
+    created(){
+      //fetch or get todos from api
+      axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+      .then(res => this.todos = res.data)
+      .catch(err => console.log(err));
     }
 }
 </script>
