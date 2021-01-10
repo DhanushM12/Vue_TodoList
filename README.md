@@ -1,4 +1,4 @@
-# vue_todolist
+# VUE JS TodoList Application
 
 ## Project Folder Structure
 
